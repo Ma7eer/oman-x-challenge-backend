@@ -61,7 +61,7 @@ app.post("/upload", (req, res) => {
       })
       .catch((err) => {
         console.log(err);
-        res.status(500).send({ message: err });
+        return res.status(500).send({ message: err });
       });
   });
 });
