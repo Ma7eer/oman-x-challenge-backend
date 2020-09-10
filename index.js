@@ -33,8 +33,10 @@ app.get("/", function (req, res) {
 app.post("/upload", (req, res) => {
   upload(req, res, function (err) {
     if (err instanceof multer.MulterError) {
+      console.log("1", err);
       return res.status(500).json(err);
     } else if (err) {
+      console.log("2", err);
       return res.status(500).json(err);
     }
     let data = {
