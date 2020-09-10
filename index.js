@@ -55,7 +55,10 @@ app.post("/upload", (req, res) => {
         // console.log(data);
         return res.status(200).send({ file: req.file, data });
       })
-      .catch((err) => res.status(500).send({ message: err }));
+      .catch((err) => {
+        console.log(err);
+        res.status(500).send({ message: err });
+      });
   });
 });
 
