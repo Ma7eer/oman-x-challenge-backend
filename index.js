@@ -3,6 +3,8 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 const multer = require("multer");
 const cors = require("cors");
+const fs = require("fs");
+const path = require("path");
 
 const runOCR = require("./google-vision");
 
@@ -46,7 +48,7 @@ app.post("/upload", (req, res) => {
       dueDate: "",
       balanceDue: "",
     };
-    runOCR(`./public/${NEW_FILENAME}`)
+    runOCR(path.join(__dirname, `/public/${NEW_FILENAME}`))
       .then((result) => {
         // console.log(res);
         data.companyName = result[1].description + " " + result[2].description;
