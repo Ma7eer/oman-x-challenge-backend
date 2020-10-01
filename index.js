@@ -73,16 +73,22 @@ app.post("/upload-bank-statement", (req, res) => {
       console.log("2", err);
       return res.status(500).json(err);
     }
-    //   let data = {
-    //     companyName: "",
-    //     invoiceNo: "",
-    //     invoiceDate: "",
-    //     dueDate: "",
-    //     balanceDue: "",
-    //   };
     runOCR(path.join(__dirname, `/public/${NEW_FILENAME}`))
       .then((result) => {
-        let dataArray = result[0].description.split("\n").slice(14);
+        /*
+        result[0].description: "lorem/n ipsum" <- sample string we receive
+        .split(/n): split based on new line "/n"
+        .slice(): remove the beginning part of the array (data we don't need)
+        .pop(): last element is an empty string so we remove it
+        */
+        let dataArray = result[0].description.split("\n").slice(14).pop();
+        // We loop to get our data in a format that the frontend can accept
+        // and put into a table
+        let data = {};
+        for (let i = 0; i < dataArray.length; i += 4) {
+          temp = dataArray.slice(i, i + 4);
+          console.log(temp);
+        }
         console.log(dataArray);
         return res.status(200).send({
           file: req.file,
