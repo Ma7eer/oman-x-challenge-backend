@@ -25,14 +25,12 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage }).single("file");
 
-// app.use(express.static("public"));
-
 // index page
 app.get("/", function (req, res) {
   res.render("pages/index");
 });
 
-app.post("/upload", (req, res) => {
+app.post("/upload-invoice", (req, res) => {
   upload(req, res, function (err) {
     if (err instanceof multer.MulterError) {
       console.log("1", err);
@@ -64,6 +62,41 @@ app.post("/upload", (req, res) => {
         return res.status(500).send({ message: err });
       });
   });
+});
+
+app.post("/upload-bank-statement", (req, res) => {
+  console.log("ping");
+  // upload(req, res, function (err) {
+  //   if (err instanceof multer.MulterError) {
+  //     console.log("1", err);
+  //     return res.status(500).json(err);
+  //   } else if (err) {
+  //     console.log("2", err);
+  //     return res.status(500).json(err);
+  //   }
+  //   let data = {
+  //     companyName: "",
+  //     invoiceNo: "",
+  //     invoiceDate: "",
+  //     dueDate: "",
+  //     balanceDue: "",
+  //   };
+  //   runOCR(path.join(__dirname, `/public/${NEW_FILENAME}`))
+  //     .then((result) => {
+  //       // console.log(res);
+  //       data.companyName = result[1].description + " " + result[2].description;
+  //       data.invoiceNo = result[14].description;
+  //       data.invoiceDate = result[17].description;
+  //       data.dueDate = result[20].description;
+  //       data.balanceDue = result[41].description;
+  //       // console.log(data);
+  //       return res.status(200).send({ file: req.file, data });
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       return res.status(500).send({ message: err });
+  //     });
+  // });
 });
 
 app.listen(PORT, () => console.log(`running application on ${PORT}`));
