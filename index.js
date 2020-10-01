@@ -88,6 +88,7 @@ app.post("/upload-bank-statement", (req, res) => {
         for (let i = 0; i < dataArray.length; i = i + 4) {
           temp = dataArray.slice(i, i + 4);
           console.log(temp);
+          console.log("yo");
         }
         // console.log(dataArray);
         return res.status(200).send({
