@@ -82,11 +82,11 @@ app.post("/upload-bank-statement", (req, res) => {
     //   };
     runOCR(path.join(__dirname, `/public/${NEW_FILENAME}`))
       .then((result) => {
-        console.log(result[0].description);
+        let dataArray = result[0].description.split("\n").splice(0, 14);
+        console.log(dataArray);
         return res.status(200).send({
           file: req.file,
-          data: result[0].description,
-          // data
+          data: dataArray,
         });
       })
       .catch((err) => {
