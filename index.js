@@ -81,7 +81,7 @@ app.post("/upload-bank-statement", (req, res) => {
         .slice(): remove the beginning part of the array (data we don't need)
         .pop(): last element is an empty string so we remove it
         */
-        let dataArray = result[0].description.split("\n").slice(14);
+        let dataArray = result[0].description.split("\n").slice(13);
         // .pop();
         // We loop to get our data in a format that the frontend can accept
         // and put into a table
