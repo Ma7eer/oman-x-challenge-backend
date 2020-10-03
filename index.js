@@ -82,11 +82,10 @@ app.post("/upload-bank-statement", (req, res) => {
         .pop(): last element is an empty string so we remove it
         */
         let dataArray = result[0].description.split("\n").slice(13);
-        // .pop();
+        dataArray.pop();
         // We loop to get our data in a format that the frontend can accept
         // and put into a table
 
-        console.log(dataArray);
         // let data = {};
         // for (let i = 0; i < dataArray.length; i = i + 4) {
         //   temp = dataArray.slice(i, i + 4);
