@@ -87,15 +87,20 @@ app.post("/upload-bank-statement", (req, res) => {
         // We loop to get our data in a format that the frontend can accept
         // and put into a table
 
-        let data = {};
+        let data = [];
         for (let i = 0; i < dataArray.length; i = i + 4) {
           temp = dataArray.slice(i, i + 4);
-          console.log(temp);
+          let date = temp[0];
+          let description = temp[1];
+          let withdrawal = temp[2].includes("-") ? temp[2] : 0;
+          let deposit = withdrawal === 0 ? temp[2] : 0;
+          let total = temp[3];
+          data.push({ date, description, withdrawal, deposit, total });
         }
         // console.log(dataArray);
         return res.status(200).send({
           file: req.file,
-          data: dataArray,
+          data,
         });
       })
       .catch((err) => {
