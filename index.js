@@ -7,6 +7,7 @@ const fs = require("fs");
 const path = require("path");
 
 const { sequelize } = require("./database.config");
+const { InvoiceModel } = require("./invoice.model");
 const runOCR = require("./google-vision");
 
 var NEW_FILENAME;
@@ -19,6 +20,9 @@ sequelize
   .authenticate()
   .then(() => console.log("Connection has been established successfully"))
   .catch((err) => console.log("Unable to connect to the database", err));
+
+// Note: using `force: true` will drop the table if it already exists
+InvoiceModel.sync({ force: true });
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -115,6 +119,16 @@ app.post("/upload-bank-statement", (req, res) => {
         return res.status(500).send({ message: err });
       });
   });
+});
+
+app.post("/new-invoice", async (req, res) => {
+  try {
+    const newInvoice = new InvoiceModel(req.body);
+    await newInvoice.save();
+    res.status(200).json({ invoice: newInvoice });
+  } catch (err) {
+    res.status(500).json({ message: "Error on new-invoice route", err });
+  }
 });
 
 app.listen(PORT, () => console.log(`running application on ${PORT}`));
