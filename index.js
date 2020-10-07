@@ -126,10 +126,9 @@ app.post("/upload-bank-statement", (req, res) => {
 
 app.post("/new-invoice", async (req, res) => {
   try {
-    console.log(req.body.companyName);
-    // const newInvoice = new InvoiceModel(req.body);
-    // await newInvoice.save();
-    // res.status(200).json({ invoice: newInvoice });
+    const newInvoice = new InvoiceModel(req.body);
+    await newInvoice.save();
+    res.status(200).json({ invoice: newInvoice });
   } catch (err) {
     res.status(500).json({ message: "Error on new-invoice route", err });
   }
