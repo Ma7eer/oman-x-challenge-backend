@@ -6,11 +6,19 @@ const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
 
+const { sequelize } = require("./database.config");
 const runOCR = require("./google-vision");
 
 var NEW_FILENAME;
 
 app.use(cors());
+app.use(express.json());
+
+// Test if we are connecting to the database
+sequelize
+  .authenticate()
+  .then(() => console.log("Connection has been established successfully"))
+  .catch((err) => console.log("Unable to connect to the database", err));
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
