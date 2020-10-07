@@ -5,6 +5,7 @@ const multer = require("multer");
 const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
+const bodyParser = require("body-parser");
 
 const { sequelize } = require("./database.config");
 const { InvoiceModel } = require("./invoice.model");
@@ -14,6 +15,7 @@ var NEW_FILENAME;
 
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.json()); //utilizes the body-parser package
 
 // Test if we are connecting to the database
 sequelize
