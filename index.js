@@ -133,4 +133,14 @@ app.post("/new-invoice", async (req, res) => {
   }
 });
 
+app.get("/invoices", async (req, res) => {
+  try {
+    const invoices = await InvoiceModel.findAll();
+    console.log(invoices);
+    res.status(200).json({ invoices });
+  } catch (err) {
+    res.status(500).json({ message: "Error on invoices route", err });
+  }
+});
+
 app.listen(PORT, () => console.log(`running application on ${PORT}`));
