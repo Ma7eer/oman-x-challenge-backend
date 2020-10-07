@@ -16,6 +16,7 @@ var NEW_FILENAME;
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json()); //utilizes the body-parser package
+app.use(bodyParser.urlencoded({}));
 
 // Test if we are connecting to the database
 sequelize
