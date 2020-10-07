@@ -27,7 +27,7 @@ var upload = multer({ storage: storage }).single("file");
 
 // index page
 app.get("/", function (req, res) {
-  res.render("pages/index");
+  res.send("ping");
 });
 
 app.post("/upload-invoice", (req, res) => {
@@ -81,7 +81,6 @@ app.post("/upload-bank-statement", (req, res) => {
         .slice(): remove the beginning part of the array (data we don't need)
         .pop(): last element is an empty string so we remove it
         */
-        console.log(result[0].description);
         let dataArray = result[0].description.split("\n").slice(13);
         dataArray.pop();
         // We loop to get our data in a format that the frontend can accept
@@ -97,7 +96,7 @@ app.post("/upload-bank-statement", (req, res) => {
           let total = temp[3];
           data.push({ date, description, withdrawal, deposit, total });
         }
-        // console.log(dataArray);
+        console.log(data);
         return res.status(200).send({
           file: req.file,
           data,
