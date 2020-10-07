@@ -13,12 +13,17 @@ const runOCR = require("./google-vision");
 
 var NEW_FILENAME;
 
+//===========================================
+// EXPRESS MIDDLEWARE CONFIGURATION
+//===========================================
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json()); //utilizes the body-parser package
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// Test if we are connecting to the database
+//===========================================
+// DATABASE CONFIGURATION
+//===========================================
 sequelize
   .authenticate()
   .then(() => console.log("Connection has been established successfully"))
@@ -27,6 +32,9 @@ sequelize
 // Note: using `force: true` will drop the table if it already exists
 InvoiceModel.sync({ force: true });
 
+//===========================================
+// MULTER CONFIGURATION
+//===========================================
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, path.join(__dirname, "/public"));
@@ -40,11 +48,16 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage }).single("file");
 
-// index page
+//===========================================
+// ROOT ROUTE
+//===========================================
 app.get("/", function (req, res) {
   res.send("ping");
 });
 
+//===========================================
+// UPLOAD ROUTES
+//===========================================
 app.post("/upload-invoice", (req, res) => {
   upload(req, res, function (err) {
     if (err instanceof multer.MulterError) {
@@ -63,18 +76,17 @@ app.post("/upload-invoice", (req, res) => {
     };
     runOCR(path.join(__dirname, `/public/${NEW_FILENAME}`))
       .then((result) => {
-        // console.log(res);
         data.companyName = result[1].description + " " + result[2].description;
         data.invoiceNo = result[14].description;
         data.invoiceDate = result[17].description;
         data.dueDate = result[20].description;
         data.balanceDue = result[41].description;
-        // console.log(data);
         return res.status(200).send({ file: req.file, data });
       })
       .catch((err) => {
-        console.log(err);
-        return res.status(500).send({ message: err });
+        return res
+          .status(500)
+          .send({ message: "Error on upload-invoice route", err });
       });
   });
 });
@@ -119,11 +131,14 @@ app.post("/upload-bank-statement", (req, res) => {
       })
       .catch((err) => {
         console.log(err);
-        return res.status(500).send({ message: err });
+        return res.status(500).send({ message: "upload-bank-statement", err });
       });
   });
 });
 
+//===========================================
+// INVOICE CRUD ROUTES
+//===========================================
 app.post("/new-invoice", async (req, res) => {
   try {
     const newInvoice = new InvoiceModel(req.body);
