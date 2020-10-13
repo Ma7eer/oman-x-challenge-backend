@@ -139,6 +139,26 @@ app.post("/upload-bank-statement", (req, res) => {
 //===========================================
 // INVOICE CRUD ROUTES
 //===========================================
+app.post("/seed", async (req, res) => {
+  try {
+    let data ={}
+    for (let i = 0; i < 4; i++) {
+      data.companyName = `Company ${i}`;
+      data.invoiceNo = `Invoice ${i}`;
+      data.invoiceDate = `01/02/202${i}`;
+      data.dueDate = `12/04/202${i}`;
+      data.balanceDue = `${i}000`;
+
+      const newInvoice = new InvoiceModel(data);
+      await newInvoice.save();
+    }
+    
+    res.status(200).json({ message: 'success' });
+  } catch (err) {
+    res.status(500).json({ message: "Error on new-invoice route", err });
+  }
+});
+
 app.post("/new-invoice", async (req, res) => {
   try {
     const newInvoice = new InvoiceModel(req.body);
@@ -156,6 +176,17 @@ app.get("/invoices", async (req, res) => {
     res.status(200).json({ invoices });
   } catch (err) {
     res.status(500).json({ message: "Error on invoices route", err });
+  }
+});
+
+app.put("/edit-invoices/:id", async (req, res) => {
+  try {
+    const newInstance = await InvoiceModel.update();
+    // {title: req.body.title},
+    // {where: req.params.bookId}
+    res.status(200).json({ invoices });
+  } catch (err) {
+    res.status(500).json({ message: "Error on edit invoices route", err });
   }
 });
 
